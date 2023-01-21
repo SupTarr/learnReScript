@@ -1,15 +1,11 @@
-/*
-  Uncomment the block below.
- */
-/*
 let downvotes = 10
 let upvotes = 5
+
 let cssClassName = if upvotes < downvotes {
   "Comment Comment-hidden"
 } else {
   "Comment"
 }
-*/
 
 /*
   The (if/else-if/.../else) syntax is a "control flow" construct familiar
@@ -64,18 +60,14 @@ let cssClassName = if upvotes < downvotes {
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the block below for completing exercise 1.
- */
-/*
 let cartTotal = 220
-let discount = 0
+let discount = 26
+
 SimpleTest.assertEqual(
   ~expected=26,
   ~actual=discount,
   ~msg="[exercise 1] Calculate discount for total amount of shopping cart",
 )
-*/
 
 /*
   The code above is not reusable. You need functions for creating reusable
@@ -165,34 +157,40 @@ SimpleTest.assertEqual(
   tests.
   -----------------------------------------------------------------------------
  */
-/*
-  Uncomment the block below.
- */
-/*
+
 let calculateDiscount = (total: int): int => {
-  total // tests are failing
+  if total >= 500 {
+    (total->Belt.Int.toFloat *. 0.1)->Belt.Float.toInt
+  } else if total >= 200 {
+    ((total - 200)->Belt.Int.toFloat *. 0.05 +. 25.)->Belt.Float.toInt
+  } else {
+    0
+  }
 }
+
 SimpleTest.assertEqual(
   ~expected=0,
   ~actual=calculateDiscount(199),
   ~msg="[exercise 2] Calculate discount for 199",
 )
+
 SimpleTest.assertEqual(
   ~expected=25,
   ~actual=calculateDiscount(200),
   ~msg="[exercise 2] Calculate discount for 200",
 )
+
 SimpleTest.assertEqual(
   ~expected=39,
   ~actual=calculateDiscount(499),
   ~msg="[exercise 2] Calculate discount for 499",
 )
+
 SimpleTest.assertEqual(
   ~expected=50,
   ~actual=calculateDiscount(500),
   ~msg="[exercise 2] Calculate discount for 500",
 )
-*/
 
 /*
   Functions support **currying** of input arguments. This is evident
@@ -270,10 +268,6 @@ SimpleTest.assertEqual(
   later. 
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let wrapTagAroundText = (tag: string, text: string): string => {
   `<${tag}>${text}</${tag}>`
 }
@@ -292,7 +286,6 @@ let mainHeading = makeHeading1("This is the title of the document")
 let subHeading = makeHeading2("A simple tagline...")
 let para1 = makeParagraph("Text content....")
 let para2 = makeParagraph("This is the second paragraph...")
-*/
 
 /*
   Partial application is useful for fixing an argument and then binding
@@ -336,10 +329,6 @@ let para2 = makeParagraph("This is the second paragraph...")
   the input argument is explicitly stated for the benefit of the reader.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let wrapTagAroundText2 = (tagName, indent: string => string, text) => {
   let indentSpaces = indent(" ")
 
@@ -355,11 +344,11 @@ let makeDiv1 = text => wrapTagAroundText2("div", indent, text)
 let makeDiv2 = text => wrapTagAroundText2("div", x => Js.String.repeat(2, x), text)
 let makeDiv3 = text => wrapTagAroundText2("div", Js.String.repeat(2), text)
 
+let wrapedParagraph = makeDiv3(makeParagraph("Hello, world!"))
+
 // <div>
 //   <p>Hello, world!</p>
 // </div>
-makeDiv3(makeParagraph("Hello, world!"))
-*/
 
 /*
   You can pass a function as an argument to another function.
@@ -448,10 +437,6 @@ makeDiv3(makeParagraph("Hello, world!"))
   the inner text.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let betterWrapTagAroundText = (~tag, ~indent, ~text) => {
   let indentSpaces = indent(" ")
 
@@ -460,15 +445,15 @@ ${indentSpaces}${text}
 </${tag}>`
 }
 
-// <div>
-//   <p>Hello, world!</p>
-// </div>
-betterWrapTagAroundText(
+let betterWrapedParagraph = betterWrapTagAroundText(
   ~tag="div",
   ~indent=Js.String.repeat(2),
   ~text=makeParagraph("Hello, world!"),
 )
-*/
+
+// <div>
+//   <p>Hello, world!</p>
+// </div>
 
 /*
   The bindings you declare refer to **immutable** values. Immutability
@@ -517,10 +502,6 @@ betterWrapTagAroundText(
     ```
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let myCharRepeat = (~count, ~char) => {
   // Memoize the conversion of `char` value to a `string` value once
   // here. We do not want to keep invoking this function again and
@@ -542,9 +523,9 @@ let myCharRepeat = (~count, ~char) => {
   aux(s, count)
 }
 
-// call site
-myCharRepeat(~char='@', ~count=6) // @@@@@@
-*/
+// Call site
+let myFinalString = myCharRepeat(~char='@', ~count=6) // @@@@@@
+
 /*
   If you are not used to writing recursive functions it is going to take
   a while before you wrap your head around it.
@@ -614,10 +595,11 @@ myCharRepeat(~char='@', ~count=6) // @@@@@@
   like this:
 
     ```
-    // <body><div><p>Hello, world!</p></div></body>
     wrapTagAroundText("body", 
       wrapTagAroundText("div", 
         wrapTagAroundText("p", "Hello, world!")))
+
+    <body><div><p>Hello, world!</p></div></body>
     ```
 
   You have to scan the inner most expression, and begin parsing this
@@ -643,17 +625,12 @@ myCharRepeat(~char='@', ~count=6) // @@@@@@
   Let us see how that works.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
-
 // original nested call site
 //
 // returns:
-//  <div><div><div><p>Hello, world!</p></div></div></div>
+//   <div><div><div><p>Hello, world!</p></div></div></div>
 //
-wrapTagAroundText(
+let _ = wrapTagAroundText(
   "div",
   wrapTagAroundText("div", wrapTagAroundText("div", wrapTagAroundText("p", "Hello, world!"))),
 )
@@ -662,13 +639,14 @@ let wrapTagAroundText3 = (text, tag) => `<${tag}>${text}</${tag}>`
 // transformed into a data pipeline
 //
 // returns:
-// <div><div><div><p>Hello, world!</p></div></div></div>
+//   <div><div><div><p>Hello, world!</p></div></div></div>
 //
-"Hello, world!"
-->wrapTagAroundText3("p")
-->wrapTagAroundText3("div")
-->wrapTagAroundText3("div")
-->wrapTagAroundText3("div")
+let _ =
+  "Hello, world!"
+  ->wrapTagAroundText3("p")
+  ->wrapTagAroundText3("div")
+  ->wrapTagAroundText3("div")
+  ->wrapTagAroundText3("div")
 
 // use labelled ~tag parameter which makes it position less
 let wrapTagAroundText4 = (text, ~tag) => `<${tag}>${text}</${tag}>`
@@ -676,14 +654,14 @@ let wrapTagAroundText4 = (text, ~tag) => `<${tag}>${text}</${tag}>`
 // transformed into a data pipeline
 //
 // returns:
-// <div><div><div><p>Hello, world!</p></div></div></div>
+//   <div><div><div><p>Hello, world!</p></div></div></div>
 //
-"Hello, world!"
-->wrapTagAroundText4(~tag="p")
-->wrapTagAroundText4(~tag="div")
-->wrapTagAroundText4(~tag="div")
-->wrapTagAroundText4(~tag="div")
- */
+let _ =
+  "Hello, world!"
+  ->wrapTagAroundText4(~tag="p")
+  ->wrapTagAroundText4(~tag="div")
+  ->wrapTagAroundText4(~tag="div")
+  ->wrapTagAroundText4(~tag="div")
 
 /*
   There are 3 different call-sites above:
@@ -798,10 +776,7 @@ let wrapTagAroundText4 = (text, ~tag) => `<${tag}>${text}</${tag}>`
   preventing value transformation mistakes from hiding in your code. 
  */
 
-/*
-  Uncomment the line below.
- */
-// let unitValue: unit = ()
+let unitValue: unit = ()
 
 /*
   The `unit` type is a primitive. It has only a single value represented
@@ -830,10 +805,7 @@ let wrapTagAroundText4 = (text, ~tag) => `<${tag}>${text}</${tag}>`
   It may also return different results each time it is called.  
  */
 
-/*
-  Uncomment the line below.
- */
-// let timestamp = Js.Date.now()
+let timestamp = Js.Date.now()
 
 /*
   The JS Date API `now()` returns the current time as number of milliseconds
@@ -851,10 +823,7 @@ let wrapTagAroundText4 = (text, ~tag) => `<${tag}>${text}</${tag}>`
   Side-effects.
  */
 
-/*
-  Uncomment the line below.
- */
-// Js.log("takes one input, returns nothing!")
+Js.log("takes one input, returns nothing!")
 
 /*
   The `Js.log` is the binding for JS API `console.log`.
@@ -872,10 +841,6 @@ let wrapTagAroundText4 = (text, ~tag) => `<${tag}>${text}</${tag}>`
   extensively later.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let addThreeNumbers = (x, y, z) => {
   Js.log("x : " ++ Belt.Int.toString(x))
   Js.log("y : " ++ Belt.Int.toString(y))
@@ -887,8 +852,7 @@ let addThreeNumbers = (x, y, z) => {
   result
 }
 
-addThreeNumbers(1, 2, 3)
-*/
+let _ = addThreeNumbers(1, 2, 3)
 
 /*
   ReScript is not a **pure** functional language. You can use a side-effects 
