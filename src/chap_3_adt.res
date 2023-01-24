@@ -2,6 +2,7 @@ type bookFormat =
   | Hardcover
   | Paperback
   | KindleEdition
+  | Audible
 
 /*
   The `bookFormat` is a **variant** data type. 
@@ -11,13 +12,8 @@ type bookFormat =
   always be capitalized. The code will fail to compile otherwise.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let paperback = Paperback
 let kindleEdition = KindleEdition
-*/
 
 /*
   The binding can refer to only a single constructor value at any time.
@@ -51,10 +47,7 @@ let kindleEdition = KindleEdition
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the line below.
- */
-// let bookFormat: bookFormat = HardCover
+let bookFormat: bookFormat = Hardcover
 
 /*
   The `bookFormatToString` function has the following type signature:
@@ -91,21 +84,17 @@ let kindleEdition = KindleEdition
   pattern-matching.
 */
 
-/*
-  Uncomment the block below.
- */
-/*
 let bookFormatToString = format =>
   switch format {
   | Hardcover => "Hardcover"
   | Paperback => "Paperback"
   | KindleEdition => "Kindle Edition"
+  | Audible => "Audible"
   }
 
-bookFormatToString(Hardcover) // "Hardcover"
-bookFormatToString(Paperback) // "Paperback"
-bookFormatToString(KindleEdition) // "Kindle Edition"
-*/
+let _ = bookFormatToString(Hardcover) // "Hardcover"
+let _ = bookFormatToString(Paperback) // "Paperback"
+let _ = bookFormatToString(KindleEdition) // "Kindle Edition"
 
 /*
   You can write functions which transforms a value from one type to
@@ -124,21 +113,17 @@ bookFormatToString(KindleEdition) // "Kindle Edition"
   Both the `Hardcover` & `Paperback` branches returns `false`.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let isElectronic = format =>
   switch format {
   | Hardcover
   | Paperback => false
-  | KindleEdition => true
+  | KindleEdition
+  | Audible => true
   }
 
-isElectronic(Hardcover) // false
-isElectronic(Paperback) // false
-isElectronic(KindleEdition) // true
-*/
+let _ = isElectronic(Hardcover) // false
+let _ = isElectronic(Paperback) // false
+let _ = isElectronic(KindleEdition) // true
 
 /*
   The value of exhaustive pattern matching becomes evident when the time comes
@@ -158,21 +143,17 @@ isElectronic(KindleEdition) // true
   -----------------------------------------------------------------------------
 */
 
-/*
-  Uncomment the block below. It contains test code for exercise 2.
- */
-/*
 SimpleTest.assertEqual(
   ~expected="Audible",
   ~actual=bookFormatToString(Audible),
   ~msg="[exercise 2] convert Audible constructor to string value",
 )
+
 SimpleTest.assertEqual(
   ~expected=true,
   ~actual=isElectronic(Audible),
   ~msg="[exercise 2] Audible is an electronic format",
 )
-*/
 
 /*
   -----------------------------------------------------------------------------
@@ -191,26 +172,36 @@ SimpleTest.assertEqual(
   -----------------------------------------------------------------------------
 */
 
-/*
-  Uncomment the block below. It contains test code for exercise 3.
- */
-/*
+type codeEditor =
+  | VSCode
+  | RubyMine
+  | XCode
+
+let madeBy = editor => {
+  switch editor {
+  | VSCode => "Microsoft"
+  | RubyMine => "JetBrains"
+  | XCode => "Apple"
+  }
+}
+
 SimpleTest.assertEqual(
   ~expected="Microsoft",
   ~actual=madeBy(VSCode),
   ~msg="[exercise 3(b)] VSCode is made by ___",
 )
+
 SimpleTest.assertEqual(
   ~expected="JetBrains",
   ~actual=madeBy(RubyMine),
   ~msg="[exercise 3(b)] RubyMine is made by ___",
 )
+
 SimpleTest.assertEqual(
   ~expected="Apple",
   ~actual=madeBy(XCode),
   ~msg="[exercise 3(b)] XCode is made by ___",
 )
-*/
 
 type player =
   | PlayerA
@@ -233,12 +224,13 @@ type player =
   -----------------------------------------------------------------------------
 */
 
-/*
-  Uncomment the block below. It contains test code for exercise 4.
- */
-
-/*
-let nextMoveAfter = current => current
+let nextMoveAfter = current => {
+  switch current {
+  | PlayerA => PlayerB
+  | PlayerB => PlayerC
+  | PlayerC => PlayerA
+  }
+}
 
 let playerToString = player =>
   switch player {
@@ -252,17 +244,18 @@ SimpleTest.assertEqual(
   ~actual=playerToString(nextMoveAfter(PlayerA)),
   ~msg="[exercise 4] A -> B",
 )
+
 SimpleTest.assertEqual(
   ~expected=playerToString(PlayerC),
   ~actual=playerToString(nextMoveAfter(PlayerB)),
   ~msg="[exercise 4] B -> C",
 )
+
 SimpleTest.assertEqual(
   ~expected=playerToString(PlayerA),
   ~actual=playerToString(nextMoveAfter(PlayerC)),
   ~msg="[exercise 4] C -> A",
 )
- */
 
 type user =
   | Anonymous
@@ -307,11 +300,6 @@ type user =
   to different constructors.
  */
 
-/*
-  Uncomment the block below.
- */
-
-/*
 let userDescription = user =>
   switch user {
   | Anonymous => "Anonymous"
@@ -320,11 +308,10 @@ let userDescription = user =>
   | Moderator(karma, displayName) => `(mod) ${displayName}, ${Belt.Int.toString(karma)} points`
   }
 
-userDescription(Anonymous) // "Anonymous"
-userDescription(Guest(42)) // "Guest#42"
-userDescription(LoggedInUser(2010, "Robin Milner")) // "Robin Milner, 2010 points"
-userDescription(Moderator(1992, "Grace Hopper")) // "(mod) Grace Hopper, 1992 points"
- */
+let _ = userDescription(Anonymous) // "Anonymous"
+let _ = userDescription(Guest(42)) // "Guest#42"
+let _ = userDescription(LoggedInUser(2010, "Robin Milner")) // "Robin Milner, 2010 points"
+let _ = userDescription(Moderator(1992, "Grace Hopper")) // "(mod) Grace Hopper, 1992 points"
 
 type formInput =
   | Text(string) // name
@@ -351,33 +338,39 @@ type formInput =
   -----------------------------------------------------------------------------
 */
 
-/*
-  Uncomment the block below. It contains test code for exercise 5.
- */
-/*
-let formInputToHTML = formInput => `<input type="submit" />`
+let formInputToHTML = formInput => {
+  switch formInput {
+  | Text(text) => `<input type="text" name="${text}" />`
+  | Number(name, min, max) =>
+    `<input type="number" name="${name}" min=${min->Belt.Int.toString} max=${max->Belt.Int.toString} />`
+  | Email(name) => `<input type="email" name="${name}" />`
+  | Submit => `<input type="submit" />`
+  }
+}
 
 SimpleTest.assertEqual(
   ~expected=`<input type="text" name="first_name" />`,
   ~actual=formInputToHTML(Text("first_name")),
   ~msg="[exercise 5] text input for entering first name",
 )
+
 SimpleTest.assertEqual(
-  ~expected=`<input type="number" name="tickets" min=0 max=5/>`,
+  ~expected=`<input type="number" name="tickets" min=0 max=5 />`,
   ~actual=formInputToHTML(Number("tickets", 0, 5)),
   ~msg="[exercise 5] input for buying upto 5 tickets",
 )
+
 SimpleTest.assertEqual(
   ~expected=`<input type="email" name="work_email" />`,
   ~actual=formInputToHTML(Email("work_email")),
   ~msg="[exercise 5] email input for entering work email",
 )
+
 SimpleTest.assertEqual(
   ~expected=`<input type="submit" />`,
   ~actual=formInputToHTML(Submit),
   ~msg="[exercise 5] a submit button",
 )
- */
 
 /*
   The **tuple** is a immutable data structure. It can contain different 
@@ -386,10 +379,7 @@ SimpleTest.assertEqual(
   You can create a tuple value without having to define a type for it.
  */
 
-/*
-  Uncomment the line below.
- */
-// let numberFormInput = ("age-limit", 18, 25)
+let numberFormInput = ("age-limit", 18, 25)
 
 /*
   The inferred type of numberFormInput is `(string, int, int)`. Hover
@@ -400,13 +390,8 @@ SimpleTest.assertEqual(
   bindings below to see the types for `name`, `min` & `max`.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let (name, min, max) = ("age-limit", 18, 25)
 let ageLimit = (name, min, max)
-*/
 
 /*
   Since tuples are immutable, you cannot use mutation to update a tuple
@@ -420,31 +405,21 @@ let ageLimit = (name, min, max)
   is possible on immutable values.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let budget = ("price-range", 500, 1500)
 let (label, low, high) = budget
 let budget2 = (label, low - 100, high + 1000)
-*/
 
 /*
   Just like any other value, you can pass a tuple as an argument to a
   function.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let toNumberFormHTML = input => {
   let (name, min, max) = input
   `<input type="number" name="${name}" min="${Belt.Int.toString(min)}" max="${Belt.Int.toString(
-    max,
-  )}"`
+      max,
+    )}">`
 }
-*/
 
 /*
   Alternatively you can destructure the tuple in place in the arguments 
@@ -479,15 +454,10 @@ let toNumberFormHTML = input => {
   arguments.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let toNumberFormHTML2 = ((name, min, max)) =>
   `<input type="number" name="${name}" min="${Belt.Int.toString(min)}" max="${Belt.Int.toString(
-    max,
-  )}"`
-*/
+      max,
+    )}"`
 
 /*
   Tuples values have a fixed order when they are created. Tuples are
@@ -524,14 +494,9 @@ type project = {
   to the record type `project`. Hover over the bindings to see it.
 */
 
-/*
-  Uncomment the block below.
- */
-/*
 let atom = {name: "Atom", url: "https://atom.io", repositories: 255, people: 56}
 let node = {name: "Node.js", url: "https://nodejs.org", repositories: 182, people: 375}
 let rails = {name: "Ruby on Rails", url: "https://rubyonrails.org", repositories: 99, people: 66}
- */
 
 /*
   Just like tuples, the record values can be destructured into the field
@@ -549,18 +514,13 @@ let rails = {name: "Ruby on Rails", url: "https://rubyonrails.org", repositories
     ```
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let projectLinkHTML = ({url, name}) => {
   `<a href="${url}">${name}</a>`
 }
 
-projectLinkHTML(atom) // <a href="https://atom.io">Atom</a>
-projectLinkHTML(node) // <a href="https://nodejs.org">Node.js</a>
-projectLinkHTML(rails) // <a href="https://rubyonrails.org">Ruby on Rails</a>
-*/
+let _ = projectLinkHTML(atom) // <a href="https://atom.io">Atom</a>
+let _ = projectLinkHTML(node) // <a href="https://nodejs.org">Node.js</a>
+let _ = projectLinkHTML(rails) // <a href="https://rubyonrails.org">Ruby on Rails</a>
 
 /*
   You can also pass the record without destructuring. In this case
@@ -574,14 +534,9 @@ projectLinkHTML(rails) // <a href="https://rubyonrails.org">Ruby on Rails</a>
     ```
 */
 
-/*
-  Uncomment the block below.
- */
-/*
 let projectLinkHTML2 = project => {
   `<a href="${project.url}">${project.name}</a>`
 }
-*/
 
 /*
   Since records are immutable, this is how you update the value of a 
@@ -592,19 +547,13 @@ let projectLinkHTML2 = project => {
   by one.
  */
 
-/*
-  Uncomment the line below.
- */
-// let atom2 = {...atom, people: atom.people + 1}
+let atom2 = {...atom, people: atom.people + 1}
 
 /*
   There is no limitation on the number of fields you can update.
  */
 
-/*
-  Uncomment the line below.
- */
-// let atom3 = {...atom2, people: atom2.people + 5, repositories: atom2.repositories + 2}
+let atom3 = {...atom2, people: atom2.people + 5, repositories: atom2.repositories + 2}
 
 /*
   So far you have learned about the following types,
@@ -629,17 +578,12 @@ let projectLinkHTML2 = project => {
 
 type book = {title: string, tagline: string, format: bookFormat, availableInStock: int}
 
-/*
-  Uncomment the block below.
- */
-/*
 let codersAtWork = {
   title: "Coders at Work",
   tagline: "Reflections on the Craft of Programming",
   format: Paperback,
   availableInStock: 10,
 }
- */
 
 /*
   -----------------------------------------------------------------------------
@@ -663,38 +607,32 @@ let codersAtWork = {
   -----------------------------------------------------------------------------
 */
 
-/*
-  Uncomment the block below. It contains test code for exercise 6.
- */
-/*
-let bookToHTML = book => ""
+let bookToHTML = (book: book) => {
+  `<div>
+  <h2>${book.title}: ${book.tagline}</h2>
+  <p>${book.availableInStock->Belt.Int.toString} new ${book.format->bookFormatToString} available in stock</p>
+</div>`
+}
 
 let expectedBookHTML = `<div>
-    <h2>Coders at Work: Reflections on the Craft of Programming</h2>
-    <p>10 new Paperback available in stock</p>
+  <h2>Coders at Work: Reflections on the Craft of Programming</h2>
+  <p>10 new Paperback available in stock</p>
 </div>`
+
 SimpleTest.assertEqual(
   ~expected=expectedBookHTML,
   ~actual=bookToHTML(codersAtWork),
   ~msg="[exercise 6] book => string (html formatted)",
 )
- */
 
-type fontSize =
-  | Small
-  | Medium
-  | Large
-  | VeryLarge
+type fontSize = Small | Medium | Large | VeryLarge
 
-type fontFamily =
-  | Serif
-  | SansSerif
-  | Monospace
+type fontFamily = Serif | SansSerif | Monospace
 
 type simpleShape =
-  | Rectangle(int, int, int, int) // x, y, w, h,
-  | Line(int, int, int) // x, y, length
-  | Text(fontSize, fontFamily, string)
+  | Rectangle(int, int, int, int) // x, y, width, height
+  | Line(int, int, int, int) // x1, y1, x2, y2
+  | Text(string, fontSize, fontFamily)
 
 /*
   The `simpleShape` has three shape variants which has additional data
@@ -735,14 +673,9 @@ type shape =
   type `shape`.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let block = Rectangle({x: 100, y: 100, width: 50, height: 50})
 let line = Line({x1: 150, y1: 125, x2: 250, y2: 125})
 let textLabel = Text({text: "Connect", fontSize: Medium, fontFamily: Monospace})
- */
 
 /*
   To draw these shapes we can define a few functions which each know
@@ -764,10 +697,6 @@ let textLabel = Text({text: "Connect", fontSize: Medium, fontFamily: Monospace})
   indicated by the return type being `unit`.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 // pretend to draw a rectangle at (x, y) with width x height pixels
 let drawRectangle = rect => {
   Js.log("Drawing a rectangle:")
@@ -788,7 +717,6 @@ let drawText = text => {
   Js.log("Drawing text:")
   Js.log(`\tText: ${text.text}`)
 }
-*/
 
 /*
   -----------------------------------------------------------------------------
@@ -808,16 +736,17 @@ let drawText = text => {
   -----------------------------------------------------------------------------
 */
 
-/*
-  Uncomment the block below.
- */
-/*
-let drawShape = shape => ()
+let drawShape = shape => {
+  switch shape {
+  | Rectangle(rectangle) => drawRectangle(rectangle)
+  | Line(line) => drawLine(line)
+  | Text(text) => drawText(text)
+  }
+}
 
 drawShape(block)
 drawShape(line)
 drawShape(textLabel)
-*/
 
 /*
   There is a common mistake beginners to the language make when writing
