@@ -32,14 +32,9 @@ type pair<'a> = ('a, 'a)
   Since the types are parametrized by type variables.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let center: pair<int> = (960, 540)
 let leroy: pair<string> = ("Xavier", "Leroy")
 let coords: pair<float> = (101.5, 42.3)
- */
 
 /*
   Next let us look at functions which operates on polymorphic or generic
@@ -47,13 +42,8 @@ let coords: pair<float> = (101.5, 42.3)
   concrete types like `int`, `string`, etc.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let firstInPair = ((first, _): pair<'a>) => first
 let secondInPair = ((_, second): pair<'a>) => second
- */
 
 /*
   The same function implementation can be reused for `pair<int>`, 
@@ -65,16 +55,14 @@ let secondInPair = ((_, second): pair<'a>) => second
   and it will work.
  */
 
-/*
-firstInPair(center) // 960
-secondInPair(center) // 540
+let _ = firstInPair(center) // 960
+let _ = secondInPair(center) // 540
 
-firstInPair(leroy) // Xavier
-secondInPair(leroy) // Leroy
+let _ = firstInPair(leroy) // Xavier
+let _ = secondInPair(leroy) // Leroy
 
-firstInPair(coords) // 101.5
-secondInPair(coords) // 42.3
-*/
+let _ = firstInPair(coords) // 101.5
+let _ = secondInPair(coords) // 42.3
 
 /*
   Arrays are a polymorphic type data structure with the type `array<'a>`.
@@ -100,10 +88,6 @@ secondInPair(coords) // 42.3
   are implicit.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let languagesAndAuthors = [
   ("Java", "James Gosling"),
   ("C", "Dennis Ritchie"),
@@ -115,16 +99,12 @@ let languagesAndAuthors = [
   ("Lisp", "John McCarthy"),
   ("Pascal", "Niklaus Wirth"),
 ]
-*/
 
 /*
   Above you have an array of`(string, string)` tuples.
  */
 
-/*
-  Uncomment the line below.
- */
-// let arrayLength = Js.Array.length(languagesAndAuthors)
+let arrayLength = Js.Array.length(languagesAndAuthors)
 
 /*
   ReScript array compiles to a JavaScript array. So the JavaScript array
@@ -146,13 +126,8 @@ let languagesAndAuthors = [
   It returns the number of elements in the array.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let arrayFirstItem = languagesAndAuthors[0]
 let arrayLastItem = languagesAndAuthors[arrayLength - 1]
-*/
 
 /*
   You can access the elements in an array by index.
@@ -166,15 +141,11 @@ let arrayLastItem = languagesAndAuthors[arrayLength - 1]
   or binding to an array value.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let tupleToString = ((first, second)) => `${first}: ${second}`
 
 // Using JS API
-Js.Array.map(tupleToString, languagesAndAuthors)
-*/
+let _ = Js.Array.map(tupleToString, languagesAndAuthors)
+
 /*
   __DO NOT UNCOMMENT. THIS IS NOT CODE.__
   Result: 
@@ -228,13 +199,9 @@ Js.Array.map(tupleToString, languagesAndAuthors)
   to a new array of type `array<string>`.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 // Using Belt API (The ReScript standard library)
-languagesAndAuthors->Belt.Array.map(tupleToString)
-*/
+let _ = languagesAndAuthors->Belt.Array.map(tupleToString)
+
 /*
   __DO NOT UNCOMMENT. THIS IS NOT CODE.__
   Result: 
@@ -299,16 +266,15 @@ type pl = {language: string, author: string}
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the block below. It contains test code for exercise 1.
- */
-/*
+let parsePL = ((language, author)): pl => {
+  {language, author}
+}
+
 SimpleTest.assertEqual(
   ~expected={language: "JavaScript", author: "Brendan Eich"},
   ~actual=parsePL(("JavaScript", "Brendan Eich")),
   ~msg="[exercise 1] parse `pl` record type value from string tuple",
 )
-*/
 
 /*
   -----------------------------------------------------------------------------
@@ -323,18 +289,17 @@ SimpleTest.assertEqual(
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the block below. It contains test code for exercise 2.
- */
-/*
 let lowercaseLanguages = []
+
+let _ = languagesAndAuthors->Js.Array2.map(((language, _)) => {
+  language->Js.String2.toLowerCase->Js.Array2.push(lowercaseLanguages, _)
+})
 
 SimpleTest.assertEqual(
   ~expected=["java", "c", "python", "php", "perl", "javascript", "ruby", "lisp", "pascal"],
   ~actual=lowercaseLanguages,
   ~msg="[exercise 2] languages in lowercase",
 )
-*/
 
 /*
   -----------------------------------------------------------------------------
@@ -347,19 +312,19 @@ SimpleTest.assertEqual(
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the block below. It contains test code for exercise 3.
- */
-/*
 let names = [("Jhumpa", "Lahiri"), ("J. K", "Rowling"), ("Devdutt", "Pattanaik")]
 let fullnames = []
+
+let _ =
+  names->Js.Array2.map(((firstName, lastName)) =>
+    `${firstName} ${lastName}`->Js.Array2.push(fullnames, _)
+  )
 
 SimpleTest.assertEqual(
   ~expected=["Jhumpa Lahiri", "J. K Rowling", "Devdutt Pattanaik"],
   ~actual=fullnames,
   ~msg="[exercise 3] full names",
 )
-*/
 
 /*
   -----------------------------------------------------------------------------
@@ -372,11 +337,9 @@ SimpleTest.assertEqual(
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the block below. It contains test code for exercise 4.
- */
-/*
 let authors = []
+
+let _ = languagesAndAuthors->Js.Array2.map(((_, author)) => author->Js.Array2.push(authors, _))
 
 SimpleTest.assertEqual(
   ~expected=[
@@ -393,7 +356,6 @@ SimpleTest.assertEqual(
   ~actual=authors,
   ~msg="[exercise 4] programming language authors",
 )
-*/
 
 /*
   The `filter` function returns a new array that keeps all the array
@@ -421,16 +383,11 @@ SimpleTest.assertEqual(
   to the same type.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
-let filtered =
-  Js.Array.filter(
-    ((language, _)) => Js.String.startsWith("P", language),
-    languagesAndAuthors,
-  )
-*/
+let filtered = Js.Array.filter(
+  ((language, _)) => Js.String.startsWith("P", language),
+  languagesAndAuthors,
+)
+
 /*
   __DO NOT UNCOMMENT. THIS IS NOT CODE.__
   Result: 
@@ -462,16 +419,21 @@ let filtered =
   -----------------------------------------------------------------------------
  */
 
-/*
 let compiledLanguages = ["Java", "C"]
 let dynamicLanguages = []
+
+let _ = languagesAndAuthors->Js.Array2.map(((language, _)) =>
+  switch language->Js.Array2.includes(compiledLanguages, _) {
+  | false => language->Js.Array2.push(dynamicLanguages, _)
+  | _ => 0
+  }
+)
 
 SimpleTest.assertEqual(
   ~expected=["Python", "PHP", "Perl", "JavaScript", "Ruby", "Lisp", "Pascal"],
   ~actual=dynamicLanguages,
   ~msg="[exercise 5] dynamic languages",
 )
-*/
 
 /*
   The `reduce` function is used when you need to summarize an array of
@@ -481,10 +443,6 @@ SimpleTest.assertEqual(
   an array of statewise counts.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 type metric = {state: string, count: int}
 
 let mh = {state: "Maharasthra", count: 2342}
@@ -497,7 +455,6 @@ let tn = {state: "Tamil Nadu", count: 770}
 let totalCount = Js.Array.reduce((acc, {count}) => {
   acc + count
 }, 0, [mh, ka, dl, wb, jh, tn]) // 4974
-*/
 
 /*
   The type of `Js.Array.reduce` is:
@@ -590,12 +547,15 @@ let totalCount = Js.Array.reduce((acc, {count}) => {
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let tableRows = [("Java", "James Gosling"), ("C", "Dennis Ritchie")]
-let tableRowsHTML = ""
+let tableRowsHTML = tableRows->Js.Array2.reduce((acc, (language, author)) => {
+    acc ++
+    `<tr>
+  <td>${language}</td>
+  <td>${author}</td>
+</tr>
+`
+  }, "")->Js.String2.trim
 
 let expectedTableHTML = `<tr>
   <td>Java</td>
@@ -605,12 +565,12 @@ let expectedTableHTML = `<tr>
   <td>C</td>
   <td>Dennis Ritchie</td>
 </tr>`
+
 SimpleTest.assertEqual(
   ~expected=expectedTableHTML,
   ~actual=tableRowsHTML,
   ~msg="[exercise 6] Use `Js.Array.reduce` to generate table rows HTML",
 )
- */
 
 /*
   -----------------------------------------------------------------------------
@@ -632,14 +592,12 @@ SimpleTest.assertEqual(
 
 type book = {name: string, author: string}
 
-/*
-  Uncomment the block below.
- */
-/*
 let books = ["Design as Art", "Anathem", "Shogun"]
 let authors = ["Bruno Munari", "Neal Stephenson", "James Clavell"]
 
-let mergedBooks = []
+let mergedBooks = Belt.Array.zip(books, authors)->Js.Array2.map(((book, author)) => {
+  {name: book, author}
+})
 
 let expectedBooks = SimpleTest.assertEqual(
   ~expected=[
@@ -650,7 +608,6 @@ let expectedBooks = SimpleTest.assertEqual(
   ~actual=mergedBooks,
   ~msg="[exercise 7] merge two array values into an array of record values",
 )
-*/
 
 /*
   The list<'a> is single linked-list. It is an immutable data structure.
@@ -658,32 +615,21 @@ let expectedBooks = SimpleTest.assertEqual(
   Hover over `statewiseMetrics` to see its type. It will be `list<metric>`.  
  */
 
-/*
-  Uncomment the line below.
- */
-// let statewiseMetrics = list{mh, ka, dl, wb, jh, tn}
+let statewiseMetrics = list{mh, ka, dl, wb, jh, tn}
 
 /*
   You can prepend a value to to create a new list using the spread
   syntax. This is an immutable operation.
- */
+*/
 
-/*
-  Uncomment the block below.
- */
-/*
 let gj = {state: "Gujarat", count: 500}
 let statewiseMetrics2 = list{gj, ...statewiseMetrics}
-*/
 
 /*
  You can reverse a list like this.
  */
 
-/*
-  Uncomment the line below.
- */
-// let reversed = statewiseMetrics2->Belt.List.reverse
+let reversed = statewiseMetrics2->Belt.List.reverse
 
 /*
   -----------------------------------------------------------------------------
@@ -703,6 +649,24 @@ let statewiseMetrics2 = list{gj, ...statewiseMetrics}
     ```
   -----------------------------------------------------------------------------
  */
+
+let rec myCustomMap = (list, callBack) => {
+  switch list {
+  | list{} => list{}
+  | list{head, ...rest} => list{callBack(head), ...myCustomMap(rest, callBack)}
+  }
+}
+
+let rec myCustomFilter = (list, condition) => {
+  switch list {
+  | list{} => list{}
+  | list{head, ...rest} =>
+    switch condition(head) {
+    | true => list{head, ...myCustomFilter(rest, condition)}
+    | _ => myCustomFilter(rest, condition)
+    }
+  }
+}
 
 /*
   -----------------------------------------------------------------------------
@@ -727,15 +691,10 @@ let statewiseMetrics2 = list{gj, ...statewiseMetrics}
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 statewiseMetrics
 ->myCustomFilter(x => x.count > 500)
 ->myCustomMap(({state, count}) => `${state}: ${count->Belt.Int.toString}`)
 ->Belt.List.forEach(Js.log)
-*/
 
 /*
   You can also pattern-match on lists.
@@ -753,10 +712,7 @@ statewiseMetrics
   to destructure the first value into `head` and the remaining items into
   the `rest` binding.
  */
-/*
-  Uncomment the block below.
- */
-/*
+
 let describeList = xs =>
   switch xs {
   | list{} => "This list is empty"
@@ -768,14 +724,13 @@ let describeList = xs =>
   }
 
 // This list is empty
-describeList(list{})
+let _ = describeList(list{})
 
 // The first item in this list is: alone and there are other 0 items.
-describeList(list{"alone"})
+let _ = describeList(list{"alone"})
 
 // The first item in this list is: hello and there are other 3 items.
-describeList(list{"hello", "world", "good", "bye"})
-*/
+let _ = describeList(list{"hello", "world", "good", "bye"})
 
 /*
   -----------------------------------------------------------------------------
@@ -860,10 +815,6 @@ describeList(list{"hello", "world", "good", "bye"})
   variants.
 */
 
-/*
-  Uncomment the block below.
- */
-/*
 type key =
   | Up
   | Down
@@ -883,9 +834,8 @@ let userInputToKey = keypress =>
   | _ => None
   }
 
-userInputToKey("1234") // None
-userInputToKey("escape") // Some(Escape)
-*/
+let _ = userInputToKey("1234") // None
+let _ = userInputToKey("escape") // Some(Escape)
 
 /*
   You can pattern-match an option value like any other variant.
@@ -894,18 +844,14 @@ userInputToKey("escape") // Some(Escape)
   returns a default value - "This message is empty"
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let printMessage = message =>
   switch message {
   | None => "This message is empty"
   | Some(x) => x
   }
 
-let bukowski = `If you’re going to try, go all the way.
-Otherwise, don’t even start.
+let bukowski = `If you're going to try, go all the way.
+Otherwise, don't even start.
 If you're going to try, go all the way.
 This could mean losing girlfriends, wives, relatives, jobs and maybe even your mind.
 It could mean not eating for three or four days.
@@ -914,17 +860,16 @@ It could mean jail.
 It could mean derision, mockery, isolation.
 Isolation is the gift.
 All the others are a test of your endurance, of how much you really want to do it.
-And, you’ll do it, despite rejection and the worst odds.
+And, you'll do it, despite rejection and the worst odds.
 And it will be better than anything else you can imagine.
-If you’re going to try, go all the way.
+If you're going to try, go all the way.
 There is no other feeling like that.
 You will be alone with the gods, and the nights will flame with fire.
 DO IT. DO IT. DO IT. All the way
-You will ride life straight to perfect laughter. It’s the only good fight there is`
+You will ride life straight to perfect laughter. It's the only good fight there is`
 
-printMessage(Some(bukowski))
-printMessage(None)
-*/
+let _ = printMessage(Some(bukowski))
+let _ = printMessage(None)
 
 /*
   Earlier we used `map` for arrays & list values. An input function was iteratively
@@ -945,10 +890,6 @@ printMessage(None)
   they are.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let repeatTwice = x =>
   switch x {
   | Some(text) => Some(Js.String.repeat(2, text))
@@ -958,8 +899,7 @@ let repeatTwice = x =>
 let messages = [Some("hello"), Some("world"), None, None, Some("goodbye")]
 
 // [Some("hellohello"), Some("worldworld"), None, None, Some("goodbyegoodbye")]
-messages->Belt.Array.map(repeatTwice)
-*/
+let _ = messages->Belt.Array.map(repeatTwice)
 
 /*
   The `repeatTwiceZeroKnowledge` function does not pattern match an option
@@ -985,12 +925,7 @@ messages->Belt.Array.map(repeatTwice)
     ```
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let repeatTwiceZeroKnowledge = text => Js.String.repeat(2, text)
 
 // [Some("hellohello"), Some("worldworld"), None, None, Some("goodbyegoodbye")]
-messages->Belt.Array.map(x => x->Belt.Option.map(repeatTwiceZeroKnowledge))
-*/
+let _ = messages->Belt.Array.map(x => x->Belt.Option.map(repeatTwiceZeroKnowledge))
