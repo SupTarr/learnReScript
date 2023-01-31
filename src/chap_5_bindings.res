@@ -48,23 +48,16 @@
   You can use the `%raw()` 
  */
 
-/*
-  Uncomment the block below.
- */
-/*
-let dateInDdMmYyyy = %raw(
-  `
+let dateInDdMmYyyy = %raw(`
 function () {
   const o_date = new Intl.DateTimeFormat();
   const f_date = (m_ca, m_it) => Object({ ...m_ca, [m_it.type]: m_it.value });
   const { day, month, year } = o_date.formatToParts().reduce(f_date, {});
   return day + "/" + month + "/" + year;
 }
-`
-)
+`)
 
 dateInDdMmYyyy() // dd/mm/yyyy
-*/
 
 /*
   The code below is written in JavaScript.
@@ -108,7 +101,7 @@ dateInDdMmYyyy() // dd/mm/yyyy
   Let us see now, how the binding is written.
  */
 
-@bs.module("fs")
+@module("fs")
 external readFile: (string, string, (Js.Nullable.t<{..}>, string) => unit) => unit = "readFile"
 
 /*
@@ -133,18 +126,13 @@ external readFile: (string, string, (Js.Nullable.t<{..}>, string) => unit) => un
     ```
  */
 
-/*
-  Uncomment the block below.
- */
-/*
-readFile("./bsconfig.json", "utf8", (error, data) => {
+readFile("../bsconfig.json", "utf8", (error, data) => {
   if !Js.isNullable(error) {
-    Js.Console.error2("config file errro: ", error)
+    Js.Console.error2("config file error: ", error)
   } else {
-    Js.log2("[bsconfig.json]", data)
+    Js.log2("[bsconfig.json] from readFile\n", data)
   }
 })
-*/
 
 /*
   -----------------------------------------------------------------------------
@@ -154,6 +142,9 @@ readFile("./bsconfig.json", "utf8", (error, data) => {
   -----------------------------------------------------------------------------
  */
 
+@module("fs")
+external readFileSync: (string, string) => string = "readFileSync"
+
 /*
   -----------------------------------------------------------------------------
   Exercise 2
@@ -162,15 +153,17 @@ readFile("./bsconfig.json", "utf8", (error, data) => {
   -----------------------------------------------------------------------------
  */
 
+Js.log2("[bsconfig.json] from readFileSync\n", readFileSync("../bsconfig.json", "utf8"))
+
 /*
   You can bind to global JS values using `bs.val` and `external`.
  */
-@bs.val external __dirname: string = "__dirname"
 
-/*
-  Uncomment the line below.
- */
-// let pathToSomeFile = __dirname ++ "/someFile.txt"
+@val external __dirname: string = "__dirname"
+
+Js.log(__dirname)
+
+let pathToSomeFile = __dirname ++ "/someFile.txt"
 
 /*
   -----------------------------------------------------------------------------
@@ -179,6 +172,9 @@ readFile("./bsconfig.json", "utf8", (error, data) => {
   Write a binding for `path.resolve`.
   -----------------------------------------------------------------------------
  */
+
+@module("path")
+external resolve: (string, string) => string = "resolve"
 
 /*
   -----------------------------------------------------------------------------
@@ -194,6 +190,10 @@ readFile("./bsconfig.json", "utf8", (error, data) => {
   -----------------------------------------------------------------------------
  */
 
+let pathToHelloTxt = resolve(__dirname, "hello.txt")
+
+Js.log(pathToHelloTxt)
+
 /*
   So far we have been dealing with immutable values. Arrays were the only
   mutable type you have worked with so far. Writing correct code becomes
@@ -205,11 +205,6 @@ readFile("./bsconfig.json", "utf8", (error, data) => {
   Let us see how you can mutate a let-binding using `ref` values.
  */
 
-/*
-  Uncomment the block below.
- */
-
-/*
 let counter = ref(0)
 let setCounter = (~step) => {
   counter := counter.contents + step
@@ -220,11 +215,10 @@ setCounter(~step=2) // counter.contents = 3
 setCounter(~step=3) // counter.contents = 6
 setCounter(~step=4) // counter.contents = 10
 
-counter.contents // 10
-*/
+Js.log(counter.contents) // 10
 
 /*
-  The `counter` binding has the type `ref(int)`. Hover over the binding
+  The `counter` binding has the type `ref<int>`. Hover over the binding
   to reveal its type.
 
   The special assignment syntax is used for mutating a contents of a
