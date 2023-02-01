@@ -370,3 +370,6 @@ Js.log(rails->Github_OT.people) // returns: 66
 
 let rails2 = rails->Github_OT.updateRepositories(1)
 Js.log(rails2->Github_OT.repositories) // returns: 100
+
+let rails3 = rails2->Github_OT.updatePeople(4)
+Js.log(rails3->Github_OT.people) // returns: 70

@@ -139,6 +139,10 @@ var rails2 = updateRepositories(rails, 1);
 
 console.log(rails2.repositories);
 
+var rails3 = updatePeople(rails2, 4);
+
+console.log(rails3.people);
+
 var Github_WI;
 
 var bookFormat = /* Paperback */1;
@@ -157,4 +161,5 @@ exports.GithubProject__OpaqueType = GithubProject__OpaqueType;
 exports.Github_OT = Github_OT;
 exports.rails = rails;
 exports.rails2 = rails2;
+exports.rails3 = rails3;
 /*  Not a pure module */
