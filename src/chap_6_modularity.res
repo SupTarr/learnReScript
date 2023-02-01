@@ -28,10 +28,6 @@
   Modules can also be nested within a file. Here is an example:
  */
 
-/*
-  Uncomment the line below.
- */
-/*
 module GithubProject__WithoutInterface = {
   type t = {
     name: string,
@@ -42,7 +38,6 @@ module GithubProject__WithoutInterface = {
 
   let linkTo = t => `<a href="${t.url}">${t.name}</a>`
 }
-*/
 
 /*
   To refer to this nested module type from another module you will have
@@ -60,10 +55,7 @@ module GithubProject__WithoutInterface = {
   access the main type of a module like `TheModuleName.t`.
  */
 
-/*
-  Uncomment the line below.
- */
-// module Github_WI = GithubProject__WithoutInterface
+module Github_WI = GithubProject__WithoutInterface
 
 /*
   The module name is long and tedious to type often. So we created an alias
@@ -71,10 +63,7 @@ module GithubProject__WithoutInterface = {
   it still refers to this: `GithubProject_WithoutInterface.t`.
  */
 
-/*
-  Uncomment the line below.
- */
-// let atom: Github_WI.t = {name: "Atom", url: "https://atom.io", repositories: 255, people: 56}
+let atom: Github_WI.t = {name: "Atom", url: "https://atom.io", repositories: 255, people: 56}
 
 /*
   -----------------------------------------------------------------------------
@@ -90,10 +79,7 @@ module GithubProject__WithoutInterface = {
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the line below.
- */
-// atom->Github_WI.linkTo // <a href="https://atom.io">Atom</a>
+let _ = atom->Github_WI.linkTo // <a href="https://atom.io">Atom</a>
 
 /*
   Prefix the module name to bring the function you want to call into
@@ -101,10 +87,7 @@ module GithubProject__WithoutInterface = {
   applying a function, works the same as you learned earlier.
 */
 
-/*
-  Uncomment the line below.
- */
-// let bookFormat: Chap_3_adt.bookFormat = Paperback
+let bookFormat: Chap_3_adt.bookFormat = Paperback
 
 /*
   Any binding or type defined in the other modules are also available here.
@@ -115,10 +98,6 @@ module GithubProject__WithoutInterface = {
   in the scope of this module. The type annotation informs the compiler.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 module GithubProject: {
   type t = {
     name: string,
@@ -126,6 +105,8 @@ module GithubProject: {
     repositories: int,
     people: int,
   }
+
+  let url: t => string
 
   let linkTo: t => string
 } = {
@@ -136,11 +117,10 @@ module GithubProject: {
     people: int,
   }
 
-  // let url = t => t.url
+  let url = t => t.url
 
   let linkTo = t => `<a href="${t.url}">${t.name}</a>`
 }
-*/
 
 /*
   There is some additional syntax here. The module definition is
@@ -173,7 +153,6 @@ module GithubProject: {
   This interface defines the record type `t` and a function named
   `linkTo` which accepts this type `t` as input and returns a
   string.
-
 
   Everything defined inside the `GithubProject_WithoutInterface` module
   is public because it does not define its interface.
@@ -214,10 +193,6 @@ module GithubProject: {
   -----------------------------------------------------------------------------
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let node: GithubProject.t = {
   name: "Node.js",
   url: "https://nodejs.org",
@@ -225,21 +200,15 @@ let node: GithubProject.t = {
   people: 375,
 }
 
-node->GithubProject.linkTo
-*/
+let _ = node->GithubProject.linkTo
 
 /*
   The `node` binding is a record type. So you update it in the same manner
   you would update **immutable** values.
 */
 
-/*
-  Uncomment the block below.
- */
-/*
 let node2 = {...node, people: node.people + 10}
 let node3 = {...node2, repositories: node2.repositories + 1}
-*/
 
 /*
   -----------------------------------------------------------------------------
@@ -250,27 +219,28 @@ let node3 = {...node2, repositories: node2.repositories + 1}
   -----------------------------------------------------------------------------
 */
 
-/*
-  Uncomment the block below.
- */
-/*
 SimpleTest.assertEqual(
   ~expected="https://nodejs.org",
   ~actual=node3->GithubProject.url,
   ~msg="[exercise 3] github project url",
 )
-*/
 
-/*
-  Uncomment the block below.
- */
-/*
 module GithubProject__OpaqueType: {
   type t
 
   let make: (~name: string, ~url: string, ~repositories: int, ~people: int) => t
 
+  let name: t => string
+
+  let url: t => string
+
+  let repositories: t => int
+
+  let people: t => int
+
   let linkTo: t => string
+
+  let updateRepositories: (t, int) => t
 
   let updatePeople: (t, int) => t
 } = {
@@ -282,19 +252,28 @@ module GithubProject__OpaqueType: {
   }
 
   let make = (~name, ~url, ~repositories, ~people) => {
-    name: name,
-    url: url,
-    repositories: repositories,
-    people: people,
+    name,
+    url,
+    repositories,
+    people,
   }
 
+  let name = t => t.name
+
+  let url = t => t.url
+
+  let repositories = t => t.repositories
+
+  let people = t => t.people
+
   let linkTo = t => `<a href="${t.url}">${t.name}</a>`
+
+  let updateRepositories = (t, count) => {...t, repositories: t.repositories + count}
 
   let updatePeople = (t, count) => {...t, people: t.people + count}
 }
 
 module Github_OT = GithubProject__OpaqueType
-*/
 
 /*
   This module `Github_OT` declares an opaque type `t` in its interface.
@@ -343,18 +322,14 @@ module Github_OT = GithubProject__OpaqueType
   by clients.
  */
 
-/*
-  Uncomment the block below.
- */
-/*
 let rails = Github_OT.make(
   ~name="Ruby on Rails",
   ~url="https://rubyonrails.org",
   ~repositories=99,
   ~people=66,
 )
-rails->Github_OT.linkTo
-*/
+
+let _ = rails->Github_OT.linkTo
 
 /*
   So if you don't know the implementation is a record, then how do you
@@ -367,10 +342,7 @@ rails->Github_OT.linkTo
   implementation of the module type.
 */
 
-/*
-  Uncomment the line below.
- */
-// let rails2 = rails->Github_OT.updatePeople(5)
+let _ = rails->Github_OT.updatePeople(5)
 
 /*
   -----------------------------------------------------------------------------
@@ -391,15 +363,10 @@ rails->Github_OT.linkTo
   -----------------------------------------------------------------------------
 */
 
-/*
-  Uncomment the block below.
- */
-/*
-rails->Github_OT.name // returns: "Ruby on Rails"
-rails->Github_OT.url // returns: "https://rubyonrails.org"
-rails->Github_OT.repositories // returns: 99
-rails->Github_OT.people // returns: 66
+Js.log(rails->Github_OT.name) // returns: "Ruby on Rails"
+Js.log(rails->Github_OT.url) // returns: "https://rubyonrails.org"
+Js.log(rails->Github_OT.repositories) // returns: 99
+Js.log(rails->Github_OT.people) // returns: 66
 
 let rails2 = rails->Github_OT.updateRepositories(1)
-rails2->Github_OT.repositories // returns: 100
-*/
+Js.log(rails2->Github_OT.repositories) // returns: 100
